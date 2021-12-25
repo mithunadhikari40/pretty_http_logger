@@ -1,11 +1,11 @@
 name: pretty_http_logger
 description: A starting point for Dart libraries or applications.
 version: 0.1.0
-# homepage: https://github.com/mithunadhikari40/pretty_http_logger
+homepage: https://github.com/mithunadhikari40/pretty_http_logger
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
-  flutter: ">=2.0.0 <3.0.0"
+  flutter: ">=2.0.0"
 
 
 dependencies:
