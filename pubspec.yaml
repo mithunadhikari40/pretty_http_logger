@@ -1,5 +1,5 @@
 name: pretty_http_logger
-description: A starting point for Dart libraries or applications.
+description: A middleware logger library for Dart http library.
 version: 0.1.0
 homepage: https://github.com/mithunadhikari40/pretty_http_logger
 
