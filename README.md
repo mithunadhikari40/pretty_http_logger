@@ -154,7 +154,7 @@ class Logger extends MiddlewareContract {
 }
 ```
 
-### Packages  `pretty_http_logger` is inspired by
+### Package  `pretty_http_logger` is inspired by
 
 - `pretty_http_logger`(https://github.com/mithunadhikari40/pretty_http_logger) : Easy request and response logging.
 - `pretty_http_logger` is inspired by `http_logger`(https://github.com/gurleensethi/http_logger)
