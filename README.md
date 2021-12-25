@@ -132,7 +132,7 @@ You can also modify the `RequestData` before the request is made and every `Resp
 ```dart
 class Logger extends MiddlewareContract {
   @override
-  interceptRequest(RequestData data) {
+  void interceptRequest(RequestData data) {
     //Adding content type to every request
     data.headers["Content-Type"] = "application/json";
     
@@ -143,9 +143,13 @@ class Logger extends MiddlewareContract {
   }
 
   @override
-  interceptResponse(ResponseData data) {
+  void interceptResponse(ResponseData data) {
     //Unwrapping response from a structure
     data.body = jsonDecode(data.body)["data"];
+  }
+  @override
+  void interceptError(err) {
+    print("Error: $err");
   }
 }
 ```
