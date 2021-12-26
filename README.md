@@ -50,7 +50,7 @@ HttpWithMiddleware http = HttpWithMiddleware.build(
     HttpLogger(logLevel: LogLevel.BODY),
 ]);
 ```
-
+<!--
 You need to catch the exception thrown to know if connection timed out.
  ```dart
 try {
@@ -60,7 +60,7 @@ try {
     //Timed out
   }
 }
-```
+``` -->
 
 `HttpWithMiddleware` supports all the functions that [`http`](https://pub.dartlang.org/packages/http) provides.
 
