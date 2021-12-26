@@ -132,8 +132,14 @@ class HttpWithMiddleware {
     var client = Client();
     try {
       var response = requestTimeout == null
-          ? await fn(client)
-          : await fn(client).timeout(requestTimeout!);
+          ? await fn(client).catchError((err) {
+              middlewares
+                  ?.forEach((middleware) => middleware.interceptError(err));
+            })
+          : await fn(client).timeout(requestTimeout!).catchError((err) {
+              middlewares
+                  ?.forEach((middleware) => middleware.interceptError(err));
+            });
       if (response is Response) {
         var responseData = ResponseData.fromHttpResponse(response);
         middlewares?.forEach(

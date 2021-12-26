@@ -1,6 +1,28 @@
 import 'package:http/http.dart';
 import 'package:pretty_http_logger/src/middleware/http_methods.dart';
 
+///Response object, internally used by the library.
+///The network request is received it is broken down into pieces to be used by the library.
+
+///You can also modify every `ResponseData` after every response is received. For Example, if you want to only deal with `data` of the response.
+
+///```dart
+///class Logger extends MiddlewareContract {
+///   @override
+///   void interceptRequest(RequestData data) {
+//   }
+//
+///   @override
+///   void interceptResponse(ResponseData data) {
+///     //Unwrapping response from a structure
+///     data.body = jsonDecode(data.body)["data"];
+///   }
+///   @override
+///   void interceptError(err) {
+///   }
+/// }
+/// ```
+
 class ResponseData {
   String url;
   int statusCode;

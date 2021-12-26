@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:http/io_client.dart';
 import 'package:pretty_http_logger/src/middleware/http_methods.dart';
 import 'package:pretty_http_logger/src/middleware/middleware_contract.dart';
 import 'package:pretty_http_logger/src/middleware/models/request_data.dart';
@@ -38,7 +37,8 @@ class HttpClientWithMiddleware extends http.BaseClient {
   List<MiddlewareContract>? middlewares;
   Duration? requestTimeout;
 
-  final IOClient _client = IOClient();
+  // final IOClient _client = IOClient();
+  static final Client _client = Client();
 
   HttpClientWithMiddleware._internal(
       {this.middlewares = const [],
@@ -159,6 +159,8 @@ class HttpClientWithMiddleware extends http.BaseClient {
       );
 
       return resultResponse;
+    }).catchError((err) {
+      middlewares?.forEach((middleware) => middleware.interceptError(err));
     });
   }
 

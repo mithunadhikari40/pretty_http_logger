@@ -1,3 +1,7 @@
+///HTTP Method list, internally used by the library.
+///If the method used to make network call falls under either of the ` HEAD, GET, POST, PUT, PATCH, DELETE
+///then a corresponding method is returned. The default value is GET.
+
 enum Method {
   HEAD,
   GET,
@@ -22,6 +26,5 @@ Method methodFromString(String method) {
     case 'DELETE':
       return Method.DELETE;
   }
-  throw Exception(
-      'Method not found, please make sure it is either of the either of ${Method.values.map((e) => e.toString().replaceAll("Method.", "")).toList().join(", ")}');
+  return Method.GET;
 }

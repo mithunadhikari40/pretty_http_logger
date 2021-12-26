@@ -7,15 +7,32 @@ import 'package:pretty_http_logger/src/middleware/http_methods.dart';
 import 'package:pretty_http_logger/src/middleware/models/request_data.dart';
 import 'package:pretty_http_logger/src/middleware/models/response_data.dart';
 
+///Logger interface to log out request and response data on console.
+///Use this class as a parameter of `HttpWithMiddleware` or `HttpClientWithMiddleware` such as
+///```dart
+/// HttpWithMiddleware http = HttpWithMiddleware.build(middlewares: [
+///     HttpLogger(logLevel: LogLevel.BODY),
+/// ]);```
+/// or
+///```dart
+/// HttpClientWithMiddleware http = HttpClientWithMiddleware.build(middlewares: [
+///     HttpLogger(logLevel: LogLevel.BODY),
+/// ]);
+///```
+/// To see different types of Log level and their use cases, please see the documentation of Logger.
+
 class Logger {
   final LogLevel logLevel;
   static JsonDecoder decoder = JsonDecoder();
   static JsonEncoder encoder = JsonEncoder.withIndent('  ');
+
+  /// percentage of width the logger takes to print, defaults to 90
   final int maxWidth;
   static const int initialTab = 1;
 
   static const String tabStep = '    ';
 
+  /// whether the print will be compact or not, defaults to true
   final bool compact;
 
   Logger({
@@ -146,14 +163,15 @@ class Logger {
       //   var headersBuffer = StringBuffer();
       //   headers.forEach((key, value) => headersBuffer.write('$key: $value\n'));
       //   prettyPrintJson(headersBuffer.toString());
-      final responseHeaders = <String, String>{};
-      data.headers?.forEach((k, list) => responseHeaders[k] = list.toString());
-      _printMapAsTable(responseHeaders, header: 'Headers');
+
     }
     // }
 
     //Log the request body
     if (logBody) {
+      final responseHeaders = <String, String>{};
+      data.headers?.forEach((k, list) => responseHeaders[k] = list.toString());
+      _printMapAsTable(responseHeaders, header: 'Headers');
       logPrint('╔ Body');
       logPrint('║');
       _printResponse(data);

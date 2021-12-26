@@ -1,6 +1,6 @@
 name: pretty_http_logger
-description: A middleware logger library for Dart http library.
-version: 0.1.0
+description: Pretty Http Logger is a  middleware logger library for Dart HTTP library that logs network calls in a pretty, easy-to-read format and supports intercepting network calls.
+version: 0.2.0
 homepage: https://github.com/mithunadhikari40/pretty_http_logger
 
 environment:
