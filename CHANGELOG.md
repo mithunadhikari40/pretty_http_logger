@@ -8,3 +8,9 @@
 
 - Added Support for Web.
 - Updated documentation.
+
+
+## 0.2.1
+
+
+- Updated Readme.
