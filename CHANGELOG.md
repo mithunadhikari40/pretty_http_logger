@@ -14,3 +14,9 @@
 
 
 - Updated Readme.
+
+
+## 0.2.2
+
+
+- Handled timeout and other error issues causing an exception

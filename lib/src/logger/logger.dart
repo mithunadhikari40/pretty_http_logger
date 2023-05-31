@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:http/http.dart';
 import 'package:pretty_http_logger/src/logger/log_level.dart';
@@ -28,6 +29,10 @@ class Logger {
 
   /// percentage of width the logger takes to print, defaults to 90
   final int maxWidth;
+
+  /// Size in which the Uint8List will be splitted
+  static const int chunkSize = 20;
+
   static const int initialTab = 1;
 
   static const String tabStep = '    ';
@@ -163,7 +168,6 @@ class Logger {
       //   var headersBuffer = StringBuffer();
       //   headers.forEach((key, value) => headersBuffer.write('$key: $value\n'));
       //   prettyPrintJson(headersBuffer.toString());
-
     }
     // }
 
@@ -246,13 +250,22 @@ class Logger {
   }
 
   void _printResponse(ResponseData response) {
-    if (response.body != null) {
-      if (response.body is Map) {
+    if (response.body.isNotEmpty) {
+      try {
+        jsonDecode(response.body);
+      } catch (e) {
+        _printBlock(response.body.toString());
+      }
+      if (jsonDecode(response.body) is Map) {
         _printPrettyMap(jsonDecode(response.body));
-      } else if (response.body is List) {
+      } else if (jsonDecode(response.body) is Uint8List) {
+        logPrint('║${_indent()}[');
+        _printUint8List(jsonDecode(response.body));
+        logPrint('║${_indent()}]');
+      } else if (jsonDecode(response.body) is List) {
         logPrint('║${_indent()}[');
         _printList(jsonDecode(response.body));
-        logPrint('║${_indent()}[');
+        logPrint('║${_indent()}]');
       } else {
         _printBlock(response.body.toString());
       }
@@ -274,7 +287,7 @@ class Logger {
   }
 
   void _printLine([String pre = '', String suf = '╝']) =>
-      logPrint('$pre${'═' * maxWidth}');
+      logPrint('$pre${'═' * maxWidth}$suf');
 
   void _printKV(String key, Object v) {
     final pre = '╟ $key: ';
@@ -346,6 +359,19 @@ class Logger {
     });
 
     logPrint('║$initialIndent}${isListItem && !isLast ? ',' : ''}');
+  }
+
+  void _printUint8List(Uint8List list, {int tabs = initialTab}) {
+    var chunks = [];
+    for (var i = 0; i < list.length; i += chunkSize) {
+      chunks.add(
+        list.sublist(
+            i, i + chunkSize > list.length ? list.length : i + chunkSize),
+      );
+    }
+    for (var element in chunks) {
+      logPrint('║${_indent(tabs)} ${element.join(", ")}');
+    }
   }
 
   void _printList(List list, {int tabs = initialTab}) {
