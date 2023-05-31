@@ -161,6 +161,7 @@ class HttpClientWithMiddleware extends http.BaseClient {
       return resultResponse;
     }).catchError((err) {
       middlewares?.forEach((middleware) => middleware.interceptError(err));
+      throw ClientException('${err.toString().replaceAll("Exception:", "")}', url);
     });
   }
 
