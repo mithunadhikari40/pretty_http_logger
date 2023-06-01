@@ -20,3 +20,8 @@
 
 
 - Handled timeout and other error issues causing an exception
+
+
+## 0.2.2+1
+
+- Removed Flutter dependency as it is purely a dart package.
