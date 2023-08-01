@@ -135,15 +135,15 @@ class HttpWithMiddleware {
           ? await fn(client).catchError((err) {
               middlewares
                   ?.forEach((middleware) => middleware.interceptError(err));
-              throw ClientException('${err.toString().replaceAll("Exception:", "")}');
-
-      })
+              throw ClientException(
+                  '${err.toString().replaceAll("Exception:", "")}');
+            })
           : await fn(client).timeout(requestTimeout!).catchError((err) {
               middlewares
                   ?.forEach((middleware) => middleware.interceptError(err));
-              throw ClientException('${err.toString().replaceAll("Exception:", "")}');
-
-      });
+              throw ClientException(
+                  '${err.toString().replaceAll("Exception:", "")}');
+            });
       if (response is Response) {
         var responseData = ResponseData.fromHttpResponse(response);
         middlewares?.forEach(

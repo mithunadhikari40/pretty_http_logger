@@ -29,3 +29,7 @@
 ## 1.0.0
 - Requires Dart 3.0 or later.
 - Upgraded [`http`](https://pub.dartlang.org/packages/http) dependency to 1.0.0
+
+
+## 1.0.1
+- Made compatible with Dart Formatter
