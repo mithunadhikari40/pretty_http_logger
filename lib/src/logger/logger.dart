@@ -289,7 +289,7 @@ class Logger {
   void _printLine([String pre = '', String suf = '╝']) =>
       logPrint('$pre${'═' * maxWidth}$suf');
 
-  void _printKV(String key, Object v) {
+  void _printKV(String key, Object? v) {
     final pre = '╟ $key: ';
     final msg = v.toString();
 
