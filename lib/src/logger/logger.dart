@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:ansicolor/ansicolor.dart';
 import 'package:http/http.dart';
 import 'package:pretty_http_logger/src/logger/log_level.dart';
 import 'package:pretty_http_logger/src/middleware/http_methods.dart';
@@ -239,21 +238,12 @@ class Logger {
   }
 */
 
-  void logPrint(String message, {bool isError = false}) {
-    late AnsiPen pen;
-    if (isError) {
-      pen = AnsiPen()..red();
-    } else {
-      pen = AnsiPen()..green();
-    }
-    print(pen(message));
-  }
+  void Function(Object object) logPrint = print;
 
   static void prettyPrintJson(String? input) {
     var object = decoder.convert(input ?? '');
     var prettyString = encoder.convert(object);
-    var pen = AnsiPen()..cyan();
-    print(pen(prettyString));
+    prettyString.split('\n').forEach((element) => print(element));
   }
 
   void _printBoxed({String? header, String? text}) {
@@ -324,7 +314,11 @@ class Logger {
     }
   }
 
-  String _indent([int tabCount = initialTab]) => ' ' * tabSpaces * tabCount;
+  String _indent([int tabCount = initialTab]) {
+    // Set tabSpaces to default of 4 if outside the range [1, 10]
+    final normalizedTabCount = (tabCount >= 1 && tabCount <= 10) ? tabCount : 4;
+    return ' ' * (normalizedTabCount * tabStep.length);
+  }
 
   void _printPrettyMap(Map data,
       {int tabs = initialTab, bool isListItem = false, bool isLast = false}) {
