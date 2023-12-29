@@ -9,6 +9,7 @@ environment:
 
 
 dependencies:
+  ansicolor: ^2.0.2
   http: ^1.0.0
 
 

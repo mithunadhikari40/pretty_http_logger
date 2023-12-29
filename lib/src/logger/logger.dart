@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
+import 'package:ansicolor/ansicolor.dart';
 import 'package:http/http.dart';
 import 'package:pretty_http_logger/src/logger/log_level.dart';
 import 'package:pretty_http_logger/src/middleware/http_methods.dart';
@@ -25,7 +26,7 @@ import 'package:pretty_http_logger/src/middleware/models/response_data.dart';
 class Logger {
   final LogLevel logLevel;
   static JsonDecoder decoder = JsonDecoder();
-  //static JsonEncoder encoder = JsonEncoder.withIndent('  ');
+  static JsonEncoder encoder = JsonEncoder.withIndent('  ');
 
   /// percentage of width the logger takes to print, defaults to 90
   final int maxWidth;
@@ -238,12 +239,21 @@ class Logger {
   }
 */
 
-  void Function(Object object) logPrint = print;
+  void logPrint(String message, {bool isError = false}) {
+    late AnsiPen pen;
+    if (isError) {
+      pen = AnsiPen()..red();
+    } else {
+      pen = AnsiPen()..green();
+    }
+    print(pen(message));
+  }
 
   static void prettyPrintJson(String? input) {
     var object = decoder.convert(input ?? '');
     var prettyString = encoder.convert(object);
-    prettyString.split('\n').forEach((element) => print(element));
+    var pen = AnsiPen()..cyan();
+    print(pen(prettyString));
   }
 
   void _printBoxed({String? header, String? text}) {
