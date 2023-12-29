@@ -41,11 +41,13 @@ import 'package:pretty_http_logger/src/middleware/models/response_data.dart';
 class HttpLogger implements MiddlewareContract {
   LogLevel logLevel;
   Logger? logger;
+  int tabSpaces;
 
   HttpLogger({
     this.logLevel = LogLevel.BODY,
+    this.tabSpaces = 4,
   }) {
-    logger = Logger(logLevel: logLevel);
+    logger = Logger(logLevel: logLevel, tabSpaces: tabSpaces);
   }
 
   @override

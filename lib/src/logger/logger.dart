@@ -25,10 +25,13 @@ import 'package:pretty_http_logger/src/middleware/models/response_data.dart';
 class Logger {
   final LogLevel logLevel;
   static JsonDecoder decoder = JsonDecoder();
-  static JsonEncoder encoder = JsonEncoder.withIndent('  ');
+  //static JsonEncoder encoder = JsonEncoder.withIndent('  ');
 
   /// percentage of width the logger takes to print, defaults to 90
   final int maxWidth;
+
+  /// counts of tabs for the indent, defaults to 4
+  final int tabSpaces;
 
   /// Size in which the Uint8List will be splitted
   static const int chunkSize = 20;
@@ -43,6 +46,7 @@ class Logger {
   Logger({
     required this.logLevel,
     this.maxWidth = 90,
+    this.tabSpaces = 4,
     this.compact = true,
   });
 
@@ -310,7 +314,7 @@ class Logger {
     }
   }
 
-  String _indent([int tabCount = initialTab]) => tabStep * tabCount;
+  String _indent([int tabCount = initialTab]) => ' ' * tabSpaces * tabCount;
 
   void _printPrettyMap(Map data,
       {int tabs = initialTab, bool isListItem = false, bool isLast = false}) {
