@@ -317,7 +317,7 @@ class Logger {
   String _indent([int tabCount = initialTab]) {
     // Set tabSpaces to default of 4 if outside the range [1, 10]
     final normalizedTabCount = (tabCount >= 1 && tabCount <= 10) ? tabCount : 4;
-    return ' ' * (normalizedTabCount * tabStep.length);
+    return ' ' * (normalizedTabCount * tabSpaces);
   }
 
   void _printPrettyMap(Map data,
