@@ -5,6 +5,7 @@
 ///     HttpLogger(logLevel: LogLevel.NONE),
 /// ]);
 /// ```
+library;
 
 /// Log level of BASIC will print only the basic info to console such as Method Type, Request URL and Request Body.
 /// In case of Response it will print only status code and content-length
