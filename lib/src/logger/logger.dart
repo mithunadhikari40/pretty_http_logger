@@ -75,7 +75,7 @@ class Logger {
           final _data = data.body;
           if (_data != null) {
             if (_data is String) {
-              _printMapAsTable(jsonDecode(_data), header: 'Body');
+              _printBlock(_data);
             }
             if (_data is Map) _printMapAsTable(_data, header: 'Body');
             if (_data is MultipartRequest) {
