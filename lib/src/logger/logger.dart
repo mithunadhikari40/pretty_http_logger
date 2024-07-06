@@ -252,21 +252,20 @@ class Logger {
   void _printResponse(ResponseData response) {
     if (response.body.isNotEmpty) {
       try {
-        jsonDecode(response.body);
+        if (jsonDecode(response.body) is Map) {
+          _printPrettyMap(jsonDecode(response.body));
+        } else if (jsonDecode(response.body) is Uint8List) {
+          logPrint('║${_indent()}[');
+          _printUint8List(jsonDecode(response.body));
+          logPrint('║${_indent()}]');
+        } else if (jsonDecode(response.body) is List) {
+          logPrint('║${_indent()}[');
+          _printList(jsonDecode(response.body));
+          logPrint('║${_indent()}]');
+        } else {
+          _printBlock(response.body.toString());
+        }
       } catch (e) {
-        _printBlock(response.body.toString());
-      }
-      if (jsonDecode(response.body) is Map) {
-        _printPrettyMap(jsonDecode(response.body));
-      } else if (jsonDecode(response.body) is Uint8List) {
-        logPrint('║${_indent()}[');
-        _printUint8List(jsonDecode(response.body));
-        logPrint('║${_indent()}]');
-      } else if (jsonDecode(response.body) is List) {
-        logPrint('║${_indent()}[');
-        _printList(jsonDecode(response.body));
-        logPrint('║${_indent()}]');
-      } else {
         _printBlock(response.body.toString());
       }
     }
