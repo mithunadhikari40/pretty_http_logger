@@ -44,3 +44,6 @@
 
 ## 1.0.4
 - Fixed [`11`](https://github.com/mithunadhikari40/pretty_http_logger/issues/11)
+
+## 1.0.5
+- Fixed [`16`](https://github.com/mithunadhikari40/pretty_http_logger/issues/16)

@@ -39,6 +39,18 @@ var response = await http.post('https://jsonplaceholder.typicode.com/posts/',
 
 //Simple GET request
 var response = await http.get('https://jsonplaceholder.typicode.com/posts/');
+
+/// Simple Multipart Request
+final request = MultipartRequest('POST', Uri.parse('YOUR_URL'));
+request.fields['category_id'] = '1';
+request.headers.addAll({'Authorization': 'YOUR_AUTH_TOKEN'});
+final file = await MultipartFile.fromPath(
+"images[0]",
+"image_picker_632B42C0-11AF-4075-90F8-A7FCD48A7FC0-27133-0000014E3B2E5959.png",
+contentType: MediaType("image", "jpg"),
+);
+request.files.add(file);
+final response = await http.multipart(request);
 ```
 
 #### Request Timeout

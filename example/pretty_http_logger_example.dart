@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart';
@@ -7,11 +8,27 @@ import 'package:pretty_http_logger/src/middleware/http_client_with_middleware.da
 import 'package:pretty_http_logger/src/middleware/http_with_middleware.dart';
 
 void main() async {
+  testBasicRequest();
+  unawaited(testMultipartRequest());
+
+  /// *************** Observe the request and response log in the console ***********************
+}
+
+void testBasicRequest() async {
   final res = await baseRequest
       .get(Uri.parse('https://jsonplaceholder.typicode.com/todos/1'));
   jsonDecode(res.body);
+}
 
-  /// *************** Observe the request and response log in the console ***********************
+Future<void> testMultipartRequest() async {
+  final request = MultipartRequest('POST', Uri.parse('YOUR_URL'));
+  request.fields['category_id'] = '1';
+  request.fields['title'] = 'method title';
+  request.headers.addAll({'Authorization': 'YOUR_AUTH_TOKEN'});
+
+  final response = await baseRequest.multipart(request);
+
+  jsonDecode(response.body);
 }
 
 class _BaseRequest {
@@ -23,6 +40,11 @@ class _BaseRequest {
       HttpClientWithMiddleware.build(middlewares: [
     HttpLogger(logLevel: LogLevel.BODY),
   ]);
+
+  Future<Response> multipart(MultipartRequest request) async {
+    final response = await _streamedHttpClient.multipart(request);
+    return response;
+  }
 
   Future<StreamedResponse> send(BaseRequest request) async {
     final response = await _streamedHttpClient.send(request);
