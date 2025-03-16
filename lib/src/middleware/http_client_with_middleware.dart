@@ -103,6 +103,53 @@ class HttpClientWithMiddleware extends http.BaseClient {
   @override
   Future<StreamedResponse> send(BaseRequest request) => _client.send(request);
 
+  Future<Response> multipart(MultipartRequest request) async {
+    final fields = request.fields;
+
+    fields.addEntries(request.files.map((el) {
+      return MapEntry('FILE->${el.field}', el.filename ?? '');
+    }).toList());
+    middlewares?.forEach(
+      (middleware) => middleware.interceptRequest(
+        RequestData(
+          method: methodFromString(request.method),
+          body: fields,
+          url: request.url,
+          headers: request.headers,
+        ),
+      ),
+    );
+
+    var stream = requestTimeout == null
+        ? await send(request)
+        : await send(request).timeout(requestTimeout!);
+
+    return Response.fromStream(stream).then((response) {
+      var responseData = ResponseData.fromHttpResponse(response);
+
+      middlewares
+          ?.forEach((middleware) => middleware.interceptResponse(responseData));
+
+      var resultResponse = Response(
+        responseData.body,
+        responseData.statusCode,
+        headers: responseData.headers ?? {},
+        persistentConnection: responseData.persistentConnection ?? false,
+        isRedirect: responseData.isRedirect ?? false,
+        request: Request(
+          responseData.method.toString().substring(7),
+          Uri.parse(responseData.url),
+        ),
+      );
+
+      return resultResponse;
+    }).catchError((err) {
+      middlewares?.forEach((middleware) => middleware.interceptError(err));
+      throw ClientException(
+          '${err.toString().replaceAll("Exception:", "")}', request.url);
+    });
+  }
+
   Future<Response> _sendUnstreamed(
       String method, url, Map<String, String>? headers,
       [dynamic body, Encoding? encoding]) async {
