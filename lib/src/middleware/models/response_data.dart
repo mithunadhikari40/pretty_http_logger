@@ -33,6 +33,7 @@ class ResponseData {
   int? contentLength;
   bool? isRedirect;
   bool? persistentConnection;
+  String? reasonPhrase;
 
   ResponseData({
     required this.method,
@@ -44,6 +45,7 @@ class ResponseData {
     this.contentLength,
     this.isRedirect,
     this.persistentConnection,
+    this.reasonPhrase,
   });
 
   factory ResponseData.fromHttpResponse(Response response) {
@@ -57,6 +59,7 @@ class ResponseData {
       url: response.request!.url.toString(),
       method: methodFromString(response.request!.method),
       persistentConnection: response.persistentConnection,
+      reasonPhrase: response.reasonPhrase,
     );
   }
 }

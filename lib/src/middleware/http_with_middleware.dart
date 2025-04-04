@@ -159,6 +159,7 @@ class HttpWithMiddleware {
             responseData.method.toString().substring(7),
             Uri.parse(responseData.url),
           ),
+          reasonPhrase: responseData.reasonPhrase,
         );
 
         return resultResponse as T;
